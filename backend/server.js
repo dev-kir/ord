@@ -3,7 +3,9 @@ import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import cors from "cors";
 
-// import visitorRoutes from "./routes/visitor.route.js";
+import countRoutes from "./routes/count.route.js";
+import sentimentRoutes from "./routes/sentiment.route.js";
+import statsRoutes from "./routes/stats.route.js";
 
 dotenv.config();
 
@@ -17,7 +19,9 @@ app.set("trust proxy", true);
 app.get("/", (req, res) => {
   res.send("Server is ready");
 });
-// app.use("/api/visitor", visitorRoutes);
+app.use("/api/count", countRoutes);
+app.use("/api/sentiment", sentimentRoutes);
+app.use("/api/stats", statsRoutes);
 
 app.listen(PORT, () => {
   connectDB();
