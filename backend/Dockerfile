@@ -4,17 +4,18 @@ FROM node:22-alpine
 # Set working directory
 WORKDIR /app
 
-# Copy package files first
+# Copy package files first (better caching)
 COPY package*.json ./
 
-# Install only production deps
-RUN npm install --production
+# Install dependencies (omit dev)
+RUN apk add --no-cache python3 make g++ \
+    && npm ci --omit=dev
 
-# Copy rest of backend code
+# Copy rest of the backend code
 COPY . .
 
-# Expose API port
+# Expose backend port
 EXPOSE 2306
 
-# Run backend
+# Start backend server
 CMD ["node", "server.js"]
