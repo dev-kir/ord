@@ -4,21 +4,17 @@ FROM node:22-alpine
 # Set working directory
 WORKDIR /app
 
-# Copy package files first (better caching)
+# Copy package files first
 COPY package*.json ./
 
-# Install dependencies (omit dev)
-RUN echo "nameserver 1.1.1.1" > /etc/resolv.conf \
-    && echo "nameserver 8.8.8.8" >> /etc/resolv.conf \
-    && apk update \
-    && apk add --no-cache python3 py3-pip build-base \
-    && npm ci --omit=dev
+# Install only production deps
+RUN npm ci --omit=dev
 
-# Copy rest of the backend code
+# Copy rest of backend code
 COPY . .
 
-# Expose backend port
+# Expose API port
 EXPOSE 2306
 
-# Start backend server
+# Run backend
 CMD ["node", "server.js"]
