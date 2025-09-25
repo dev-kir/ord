@@ -8,7 +8,10 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies (omit dev)
-RUN apk add --no-cache python3 py3-pip build-base \
+RUN echo "nameserver 1.1.1.1" > /etc/resolv.conf \
+    && echo "nameserver 8.8.8.8" >> /etc/resolv.conf \
+    && apk update \
+    && apk add --no-cache python3 py3-pip build-base \
     && npm ci --omit=dev
 
 # Copy rest of the backend code
