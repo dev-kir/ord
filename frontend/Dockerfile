@@ -1,16 +1,16 @@
-# Stage 1: Build frontend
-FROM node:22-alpine AS build
+# Single stage build - serve directly with Node.js
+FROM node:22-alpine
 
 WORKDIR /app
 
-# Install build dependencies for npm (native modules, etc.)
+# Install build dependencies
 RUN apk add --no-cache python3 make g++ bash
 
 # Copy package files
 COPY package*.json ./
 
-# Install deps (omit dev, fix peer deps issues)
-RUN npm ci --omit=dev --legacy-peer-deps
+# Install ALL dependencies (including dev for build)
+RUN npm install --legacy-peer-deps
 
 # Copy source code
 COPY . .
@@ -18,10 +18,11 @@ COPY . .
 # Build static assets
 RUN npm run build
 
-# Stage 2: Serve with nginx
-FROM nginx:alpine
+# Install a simple static file server
+RUN npm install -g serve
 
-COPY --from=build /app/dist /usr/share/nginx/html
+# Expose port
+EXPOSE 3000
 
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Serve the built files
+CMD ["serve", "-s", "dist", "-l", "3000"]
