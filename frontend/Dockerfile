@@ -6,9 +6,9 @@ WORKDIR /app
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install system deps + Node deps
+# Install system deps + Node deps (omit dev)
 RUN apk add --no-cache python3 make g++ \
-    && npm ci --omit=dev
+    && npm ci --omit=dev --legacy-peer-deps
 
 # Copy source code
 COPY . .
