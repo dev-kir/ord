@@ -3,11 +3,8 @@ FROM node:22-alpine AS build
 
 WORKDIR /app
 
-# Fix DNS for apk, then install build deps
-RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.19/main" > /etc/apk/repositories \
-    && echo "http://dl-cdn.alpinelinux.org/alpine/v3.19/community" >> /etc/apk/repositories \
-    && apk update \
-    && apk add --no-cache python3 make g++ bash
+# Install build dependencies for npm (native modules, etc.)
+RUN apk add --no-cache python3 make g++ bash
 
 # Copy package files
 COPY package*.json ./
