@@ -1,27 +1,28 @@
-# Stage 1: Build with Node
+# Stage 1: Build frontend
 FROM node:22-alpine AS build
 
 WORKDIR /app
 
-# Copy package files first
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install deps
-RUN npm install
+# Install system deps + Node deps
+RUN apk add --no-cache python3 make g++ \
+    && npm ci --omit=dev
 
-# Copy frontend code
+# Copy source code
 COPY . .
 
-# Build Vite project
+# Build static files
 RUN npm run build
 
-# Stage 2: Serve with Nginx
+# Stage 2: Serve with nginx
 FROM nginx:alpine
 
-# Copy build output to Nginx html folder
+# Copy built frontend into nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Expose Nginx port
+# Expose nginx default port
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
