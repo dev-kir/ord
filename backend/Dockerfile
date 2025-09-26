@@ -1,20 +1,18 @@
-# Use Node.js LTS (22) on Alpine
+# Use Node.js 22 Alpine
 FROM node:22-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Copy package files first
+# Install build dependencies for npm (native modules, etc.)
+RUN apk add --no-cache python3 make g++ bash
+
+# Copy dependency files first
 COPY package*.json ./
 
-# Install only production deps
-RUN npm install --production
+# Install production dependencies
+RUN npm install --omit=dev
 
-# Copy rest of backend code
+# Copy rest of the backend source
 COPY . .
 
-# Expose API port
-EXPOSE 2306
-
-# Run backend
-CMD ["node", "server.js"]
