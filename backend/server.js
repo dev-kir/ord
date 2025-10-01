@@ -16,9 +16,9 @@ app.use(cors({ origin: "http://localhost:5173" })); // or "*" for testing
 app.use(express.json());
 app.set("trust proxy", true);
 
-app.get("/", (req, res) => {
-  res.send("Server is ready");
-});
+// app.get("/", (req, res) => {
+//   res.send("Server is ready");
+// });
 app.use("/api/count", countRoutes);
 app.use("/api/sentiment", sentimentRoutes);
 app.use("/api/stats", statsRoutes);
