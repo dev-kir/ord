@@ -1,20 +1,20 @@
-# Use Node 20 Alpine from your private registry
+# backend/Dockerfile
 FROM docker-registry.amirmuz.com/node:20-alpine
 
-# Set working directory inside container
+# set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json first (to leverage caching)
+# copy package files first (better cache)
 COPY package*.json ./
 
-# Install production dependencies only
-RUN npm install --omit=dev
+# install dependencies
+RUN npm install --production
 
-# Copy the rest of your project files
+# copy source
 COPY . .
 
-# Expose backend port
+# expose backend port
 EXPOSE 2306
 
-# Start server
-CMD ["npm", "start"]
+# run server
+CMD ["node", "server.js"]
