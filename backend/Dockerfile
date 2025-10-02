@@ -1,5 +1,5 @@
 # Use Node 20 Alpine from your private registry
-FROM docker-registry.amirmuz.com/node:22-alpine
+FROM docker-registry.amirmuz.com/node:20-alpine
 
 # Set working directory inside container
 WORKDIR /app
