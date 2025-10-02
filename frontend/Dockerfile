@@ -2,23 +2,25 @@ FROM docker-registry.amirmuz.com/node:20-alpine-buildtools
 
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
-
-# Install ALL dependencies (including dev for build)
+# Install all dependencies, including devDependencies
 RUN npm install --legacy-peer-deps
 
-# Copy source code
 COPY . .
-
-# Build static assets
+# Build frontend
 RUN npm run build
 
-# Install a simple static file server
-RUN npm install -g serve
+# Stage 2: Production
+FROM nginx:alpine
+
+# Remove default nginx static files
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy build output
+COPY --from=build /app/dist /usr/share/nginx/html
 
 # Expose port
 EXPOSE 3000
 
-# Serve the built files
-CMD ["serve", "-s", "dist", "-l", "3000"]
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]
