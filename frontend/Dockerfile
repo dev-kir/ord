@@ -1,4 +1,4 @@
-FROM docker-registry.amirmuz.com/node:20-alpine-buildtools
+FROM registry.example.com/node:22 AS build
 
 WORKDIR /app
 
