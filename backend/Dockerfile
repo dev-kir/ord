@@ -4,9 +4,7 @@ FROM docker-registry.amirmuz.com/node:20-alpine
 WORKDIR /app
 
 # Install system dependencies (if needed for native modules)
-RUN apt-get update && apt-get install -y \
-    python3 make g++ \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache python3 make g++
 
 # Copy dependency files first
 COPY package*.json ./
