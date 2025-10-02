@@ -3,16 +3,17 @@ FROM docker-registry.amirmuz.com/node:20-alpine
 # Set working directory
 WORKDIR /app
 
-# Copy package files first (better caching)
+# Install build dependencies for npm (native modules, etc.)
+RUN apk add --no-cache python3 make g++ bash
+
+# Copy dependency files first
 COPY package*.json ./
 
-# Install dependencies (omit dev)
-RUN apk add --no-cache python3 py3-pip build-base \
-    && npm ci --omit=dev
+# Install production dependencies
+RUN npm install --omit=dev
 
-# Copy rest of the backend code
+# Copy rest of the backend source
 COPY . .
-
 # Expose backend port
 EXPOSE 2306
 
