@@ -1,16 +1,22 @@
-FROM node:22-alpine
+# ======== Backend Dockerfile ========
 
+# Use stable Node 20 LTS, slim Debian image
+FROM node:20-bullseye-slim
+
+# Set working directory
 WORKDIR /app
 
-# Copy package files
+# Copy package files first to leverage Docker cache
 COPY package*.json ./
 
-# Install dependencies with better error handling
-RUN npm cache clean --force && \
-    npm ci --omit=dev --prefer-offline --no-audit || \
-    npm install --omit=dev --prefer-offline --no-audit
+# Install only production dependencies
+RUN npm install --omit=dev
 
-# Copy all project files
+# Copy the rest of the application
 COPY . .
 
-CMD ["node", "server.js"]
+# Expose the backend port
+EXPOSE 2306
+
+# Start the server
+CMD ["npm", "start"]
