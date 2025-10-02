@@ -1,20 +1,20 @@
-# Use Node.js 22 Alpine
-FROM node:22-alpine
+# Use official Node.js LTS image
+FROM node:20-alpine
 
-# Set working directory
+# Set working directory inside container
 WORKDIR /app
 
-# Copy dependency files first
+# Copy package.json and package-lock.json first (for caching layers)
 COPY package*.json ./
 
-# Install production dependencies
+# Install only production dependencies
 RUN npm install --omit=dev
 
-# Copy rest of the backend source
+# Copy all project files
 COPY . .
 
-# Expose port
-EXPOSE 3000
+# Expose backend port
+EXPOSE 2306
 
-# Start command
-CMD ["node", "server.js"]
+# Start server
+CMD ["npm", "start"]
