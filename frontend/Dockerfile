@@ -1,5 +1,4 @@
-# Use regular Node.js (not Alpine) to avoid network issues
-FROM node:22
+FROM docker-registry.amirmuz.com/node:20-alpine-buildtools
 
 WORKDIR /app
 
