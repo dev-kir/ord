@@ -1,20 +1,27 @@
-# backend/Dockerfile
 FROM docker-registry.amirmuz.com/node:20-alpine
 
-# set working directory
+# Set working directory
 WORKDIR /app
 
-# copy package files first (better cache)
+# Copy package files
 COPY package*.json ./
 
-# install dependencies
-RUN npm install --production
+# Install dependencies with DNS fallback and retry logic
+RUN npm config set registry https://registry.npmjs.org/ && \
+    npm config set fetch-retries 5 && \
+    npm config set fetch-retry-mintimeout 20000 && \
+    npm config set fetch-retry-maxtimeout 120000 && \
+    npm install --production --prefer-offline || \
+    (echo "Retrying with different DNS..." && \
+     echo "nameserver 8.8.8.8" > /etc/resolv.conf && \
+     echo "nameserver 8.8.4.4" >> /etc/resolv.conf && \
+     npm install --production)
 
-# copy source
+# Copy source files
 COPY . .
 
-# expose backend port
+# Expose backend port
 EXPOSE 2306
 
-# run server
+# Run server
 CMD ["node", "server.js"]
