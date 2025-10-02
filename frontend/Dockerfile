@@ -11,7 +11,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Production
-FROM nginx:alpine
+FROM docker-registry.amirmuz.com/nginx:alpine
 
 # Remove default nginx static files
 RUN rm -rf /usr/share/nginx/html/*
