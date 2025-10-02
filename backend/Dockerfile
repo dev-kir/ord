@@ -1,22 +1,20 @@
-# ======== Backend Dockerfile ========
+# Use Node 20 Alpine from your private registry
+FROM docker-registry.amirmuz.com/node:22-alpine
 
-# Use stable Node 20 LTS, slim Debian image
-FROM node:20-bullseye-slim
-
-# Set working directory
+# Set working directory inside container
 WORKDIR /app
 
-# Copy package files first to leverage Docker cache
+# Copy package.json and package-lock.json first (to leverage caching)
 COPY package*.json ./
 
-# Install only production dependencies
+# Install production dependencies only
 RUN npm install --omit=dev
 
-# Copy the rest of the application
+# Copy the rest of your project files
 COPY . .
 
-# Expose the backend port
+# Expose backend port
 EXPOSE 2306
 
-# Start the server
+# Start server
 CMD ["npm", "start"]
