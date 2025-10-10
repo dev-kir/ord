@@ -1,20 +1,10 @@
-# Use your internal Node build image
-FROM docker-registry.amirmuz.com/node:20-alpine-buildtools
+FROM docker-registry.amirmuz.com/nginx:alpine
 
-# Set working directory
-WORKDIR /app
+WORKDIR /usr/share/nginx/html
+RUN rm -rf ./*
 
-# Copy only package files first (for caching)
-COPY package*.json ./
+# Copy pre-built dist
+COPY dist/ .
 
-# Install dependencies (inside the container, Alpine-compatible)
-RUN npm install --omit=dev
-
-# Copy the rest of your source code
-COPY . .
-
-# Expose backend port
-EXPOSE 2306
-
-# Start server
-CMD ["node", "server.js"]
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
