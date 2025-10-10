@@ -1,27 +1,10 @@
-# Stage 1: Build
-FROM docker-registry.amirmuz.com/node:20-alpine-buildtools AS build
+FROM docker-registry.amirmuz.com/nginx:alpine
 
-WORKDIR /app
+WORKDIR /usr/share/nginx/html
+RUN rm -rf ./*
 
-COPY package*.json ./
-# Install all dependencies, including devDependencies
-RUN npm install --legacy-peer-deps
+# Copy pre-built dist
+COPY dist/ .
 
-COPY . .
-# Build frontend
-RUN npm run build
-
-# Stage 2: Production
-FROM  docker-registry.amirmuz.com/nginx:alpine
-
-# Remove default nginx static files
-RUN rm -rf /usr/share/nginx/html/*
-
-# Copy build output from Stage 1
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Expose port
 EXPOSE 80
-
-# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
