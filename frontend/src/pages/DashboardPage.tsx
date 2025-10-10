@@ -47,7 +47,7 @@ export default function DashboardChart() {
       //   .get(`${import.meta.env.VITE_API_URL}/stats?range=${range}`)
       .get(
         `${
-          import.meta.env.API_URL ?? "http://backend:2306/api"
+          import.meta.env.VITE_API_URL ?? "http://backend:2306/api"
         }/stats?range=${range}`
       )
       .then((res) => setData(res.data))
