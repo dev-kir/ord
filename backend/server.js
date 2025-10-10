@@ -17,14 +17,11 @@ app.use(cors({ origin: "*" }));
 app.use(express.json());
 app.set("trust proxy", true);
 
-// app.get("/", (req, res) => {
-//   res.send("Server is ready");
-// });
 app.use("/api/count", countRoutes);
 app.use("/api/sentiment", sentimentRoutes);
 app.use("/api/stats", statsRoutes);
 
-app.listen(PORT, "0,0,0,0", () => {
+app.listen(PORT, "0.0.0.0", () => {
   connectDB();
   console.log("Server started at http://localhost:" + PORT);
 });

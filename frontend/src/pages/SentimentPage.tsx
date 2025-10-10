@@ -14,12 +14,11 @@ export default function SentimentPage() {
   const [text, setText] = useState("");
   const [result, setResult] = useState<SentimentResult | null>(null);
   const [error, setError] = useState<string | null>(null);
-
   const handleAnalyze = async () => {
     try {
       const res = await axios.post<SentimentResult>(
         // "http://localhost:2306/api/sentiment",
-        `${import.meta.env.VITE_API_URL}/sentiment`,
+        `${import.meta.env.API_URL ?? "http://backend:2306/api"}/sentiment`,
         {
           text,
         }
