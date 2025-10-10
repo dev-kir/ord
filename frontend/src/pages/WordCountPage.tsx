@@ -21,7 +21,8 @@ export default function WordCountPage() {
   const handleAnalyze = async () => {
     try {
       const res = await axios.post<AnalyzeResult>(
-        "http://localhost:2306/api/count",
+        // "http://localhost:2306/api/count",
+        `${import.meta.env.VITE_API_URL}/count`,
         { text }
       );
       setResult(res.data);

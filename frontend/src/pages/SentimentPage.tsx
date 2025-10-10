@@ -18,7 +18,8 @@ export default function SentimentPage() {
   const handleAnalyze = async () => {
     try {
       const res = await axios.post<SentimentResult>(
-        "http://localhost:2306/api/sentiment",
+        // "http://localhost:2306/api/sentiment",
+        `${import.meta.env.VITE_API_URL}/sentiment`,
         {
           text,
         }
