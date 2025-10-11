@@ -13,7 +13,14 @@ const app = express();
 const PORT = process.env.PORT || 2306;
 
 // app.use(cors({ origin: "http://localhost:5173" })); // or "*" for testing
-app.use(cors({ origin: "*" }));
+// app.use(cors({ origin: "*" }));
+app.use(
+  cors({
+    origin: ["https://ord.amirmuz.com", "https://ord-api.amirmuz.com"],
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
 app.use(express.json());
 app.set("trust proxy", true);
 
