@@ -18,6 +18,26 @@ export default function WordCountPage() {
   const [result, setResult] = useState<AnalyzeResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  //   const handleAnalyze = async () => {
+  //     try {
+  //       const res = await axios.post<AnalyzeResult>(
+  //         // "http://localhost:2306/api/count",
+  //         // "http://backend:2306/api/count",
+  //         `${
+  //           import.meta.env.VITE_API_URL ?? "https://ord-api.amirmuz.com/api"
+  //         }/count`,
+  //         { text }
+  //       );
+  //       setResult(res.data);
+  //     } catch (err: any) {
+  //       if (axios.isAxiosError(err) && err.response) {
+  //         setError(err.response.data.error || "Unexpected error");
+  //       } else {
+  //         setError("Server not reachable");
+  //       }
+  //     }
+  //   };
+
   const handleAnalyze = async () => {
     try {
       const res = await axios.post<AnalyzeResult>(
@@ -30,10 +50,29 @@ export default function WordCountPage() {
       );
       setResult(res.data);
     } catch (err: any) {
-      if (axios.isAxiosError(err) && err.response) {
-        setError(err.response.data.error || "Unexpected error");
+      console.error("🧩 Full Axios error object:", err);
+
+      if (axios.isAxiosError(err)) {
+        console.error("🔍 Axios message:", err.message);
+        console.error("🔍 Axios config:", err.config);
+        if (err.response) {
+          console.error("🔍 Response status:", err.response.status);
+          console.error("🔍 Response headers:", err.response.headers);
+          console.error("🔍 Response data:", err.response.data);
+          setError(
+            `Error ${err.response.status}: ${
+              err.response.data?.error || "Unknown"
+            }`
+          );
+        } else if (err.request) {
+          console.error("📡 No response received:", err.request);
+          setError("No response from server (possible CORS or network issue)");
+        } else {
+          setError(`Request setup error: ${err.message}`);
+        }
       } else {
-        setError("Server not reachable");
+        console.error("💥 Non-Axios error:", err);
+        setError("Unexpected error (see console)");
       }
     }
   };
