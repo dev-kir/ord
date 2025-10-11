@@ -18,8 +18,10 @@ export default function SentimentPage() {
     try {
       const res = await axios.post<SentimentResult>(
         // "http://localhost:2306/api/sentiment",
-        "http://backend:2306/api/sentiment",
-        // `${import.meta.env.VITE_API_URL ?? "http://backend:2306/api"}/sentiment`,
+        // "http://backend:2306/api/sentiment",
+        `${
+          import.meta.env.VITE_API_URL ?? "https://ord-api.amirmuz.com/api"
+        }/sentiment`,
         {
           text,
         }

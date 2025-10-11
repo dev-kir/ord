@@ -44,13 +44,13 @@ export default function DashboardChart() {
   React.useEffect(() => {
     axios
       //   .get(`http://localhost:2306/api/stats?range=${range}`)
-      .get(`http://backend:2306/api/stats?range=${range}`)
+      //   .get(`http://backend:2306/api/stats?range=${range}`)
       //   .get(`${import.meta.env.VITE_API_URL}/stats?range=${range}`)
-      //   .get(
-      //     `${
-      //       import.meta.env.VITE_API_URL ?? "http://backend:2306/api"
-      //     }/stats?range=${range}`
-      //   )
+      .get(
+        `${
+          import.meta.env.VITE_API_URL ?? "https://ord-api.amirmuz.com/api"
+        }/stats?range=${range}`
+      )
       .then((res) => setData(res.data))
       .catch((err) => console.error(err));
   }, [range]);
