@@ -168,7 +168,9 @@ function getRandomTimeInDay(date) {
 async function seedLogs() {
   try {
     // Connect to MongoDB (adjust connection string as needed)
-    await mongoose.connect("mongodb://localhost:27017/ord");
+    await mongoose.connect(
+      "mongodb://mongo1:27017,mongo2:27017,mongo3:27017/ord?replicaSet=rs0"
+    );
     console.log("Connected to MongoDB");
 
     // Clear existing logs
@@ -176,14 +178,13 @@ async function seedLogs() {
     console.log("Cleared existing logs");
 
     const logs = [];
-    const startDate = new Date("2025-09-21"); // September 21, 2025
-    const endDate = new Date("2022-09-21"); // September 21, 2022 (3 years back)
+    const startDate = new Date("2022-09-21");
+    const endDate = new Date("2025-09-21");
 
-    // Generate logs for each day
     for (
       let currentDate = new Date(startDate);
-      currentDate >= endDate;
-      currentDate.setDate(currentDate.getDate() - 1)
+      currentDate <= endDate;
+      currentDate.setDate(currentDate.getDate() + 1)
     ) {
       const logsPerDay = getRandomInt(0, 825);
 
